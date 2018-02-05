@@ -6,7 +6,7 @@ let getExn: (string, int) => char;
 
 let iter: (string, ~f: char => unit) => unit;
 
-let iteri: (string, ~f: (int, char) => unit) => unit;
+let iteri: (string, ~f: (~i: int, ~elt: char) => unit) => unit;
 
 let isPrefix: (string, string) => bool;
 

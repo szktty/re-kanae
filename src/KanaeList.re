@@ -7,7 +7,7 @@ let iteri = (list, ~f) => {
     switch list {
     | [] => ()
     | [hd, ...tl] =>
-      f(i, hd);
+      f(~i, ~elt=hd);
       iter(i + 1, tl);
     };
   iter(0, list);
@@ -15,7 +15,8 @@ let iteri = (list, ~f) => {
 
 let map = (list, ~f) => List.map(f, list);
 
-let reduce = (list, ~init, ~f) => List.fold_left(f, init, list);
+let reduce = (list, ~init, ~f) =>
+  List.fold_left((accu, elt) => f(~accu, ~elt), init, list);
 
 let contains = (list, ~f) => L.exists(f, list);
 
@@ -24,6 +25,6 @@ let toArray = list =>
   | [] => [||]
   | [hd, ..._tl] =>
     let array = Array.make(length(list), hd);
-    iteri(list, ~f=(i, e) => array[i] = e);
+    iteri(list, ~f=(~i, ~elt) => array[i] = elt);
     array;
   };

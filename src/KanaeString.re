@@ -12,9 +12,12 @@ let getExn = (s, i) =>
   | None => failwith("index out of range")
   };
 
+let compare = (s1, s2) =>
+  Reason.String.compare(s1, s2) |> KanaeComparable.Result.from;
+
 let iter = (s, ~f) => String.iter(f, s);
 
-let iteri = (s, ~f) => String.iteri(f, s);
+let iteri = (s, ~f) => String.iteri((i, elt) => f(~i, ~elt), s);
 
 let isPrefix = (s, prefix) => {
   let rec f = (i, j, count) =>
@@ -52,9 +55,9 @@ let join = (~sep="", comps) => {
   Buffer.contents(buf);
 };
 
-module StringKey = {
+module Key = {
   type t = string;
-  let compare = String.compare;
+  let compare = compare;
 };
 
-module Map = Map.Make(StringKey);
+module Map = KanaeMap.Make(Key);

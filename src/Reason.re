@@ -19,3 +19,5 @@ module Obj = Obj;
 module String = String;
 
 module StringLabels = StringLabels;
+
+include Pervasives;

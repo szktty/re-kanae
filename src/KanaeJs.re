@@ -106,7 +106,7 @@ module Primitive = {
         let newDict = Js.Dict.empty();
         KanaeArray.iteri(
           Js.Dict.keys(dict),
-          ~f=(_, key) => {
+          ~f=(~i, ~elt as key) => {
             let path = path ++ "." ++ key;
             let value = Js.Dict.unsafeGet(dict, key);
             if (KanaeList.contains(ignore, ~f=target => target == path)) {
@@ -133,11 +133,7 @@ module Iterator = {
   };
   let next = iter => {
     let elt = Basic.next(iter);
-    if (Basic.isDone(elt) |> Js.to_bool) {
-      None;
-    } else {
-      Some(Basic.value(elt));
-    };
+    Basic.isDone(elt) |> Js.to_bool ? None : Some(Basic.value);
   };
   let iter = (iter, ~f) => {
     let rec iter0 = () =>
@@ -150,3 +146,9 @@ module Iterator = {
     iter0();
   };
 };
+
+let fromBool = Boolean.to_js_boolean;
+
+let fromOpt = Null.from_opt;
+
+let fromOptMap = (opt, ~f) => KanaeOption.map(opt, ~f) |> Null.from_opt;

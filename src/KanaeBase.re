@@ -11,3 +11,5 @@ let (!==) =
     : [ | `Use_physEqual] => `Use_physEqual;
 
 include Js.Promise;
+
+let promise = Js.Promise.make;

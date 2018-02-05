@@ -1,5 +1,3 @@
-module type Comparable = {type t; let compare: (t, t) => int;};
-
 module type S = {
   type key;
   type t('value);
@@ -37,7 +35,7 @@ module Basic = {
     "entries";
 };
 
-module Make = (Key: Comparable) : (S with type key = Key.t) => {
+module Make = (Key: KanaeComparable.S) : (S with type key = Key.t) => {
   type key = Key.t;
   type t('value) = Basic.t(key, 'value);
   let length = m => Basic.size(m);
@@ -76,3 +74,6 @@ module Make = (Key: Comparable) : (S with type key = Key.t) => {
     m1;
   };
 };
+
+/* test */
+let value = ();

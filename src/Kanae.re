@@ -8,7 +8,7 @@ module Bytes = KanaeBytes;
 
 module Char = KanaeChar;
 
-module Core = KanaeCore;
+module Comparable = KanaeComparable;
 
 module Date = KanaeDate;
 
