@@ -1,3 +1,5 @@
+type t = string;
+
 let length: string => int;
 
 let get: (string, int) => option(char);
@@ -13,3 +15,5 @@ let isPrefix: (string, string) => bool;
 let isSuffix: (string, string) => bool;
 
 let join: (~sep: string=?, list(string)) => string;
+
+include KanaeJSONable.S with type t := t;

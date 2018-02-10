@@ -35,7 +35,7 @@ module Basic = {
     "entries";
 };
 
-module Make = (Key: KanaeComparable.S) : (S with type key = Key.t) => {
+module Make = (Key: KanaeComparable.S) : (S with type key := Key.t) => {
   type key = Key.t;
   type t('value) = Basic.t(key, 'value);
   let length = m => Basic.size(m);
@@ -51,7 +51,7 @@ module Make = (Key: KanaeComparable.S) : (S with type key = Key.t) => {
   let set = (m, ~key, ~value) => Basic.set(m, key, value);
   let remove = (m, ~key) => Basic.delete(m, key);
   let iter = (m: t('value), ~f: (~key: key, ~value: 'value) => unit) =>
-    KanaeJs.Iterator.iter(Basic.entries(m), ~f=(elt: array((key, 'value))) =>
+    KanaeJs.Iterator.iter(Basic.entries(m), ~f=(elt: array('pair)) =>
       f(~key=Obj.magic(elt[0]), ~value=Obj.magic(elt[1]))
     );
   let map = (m, ~f) => {

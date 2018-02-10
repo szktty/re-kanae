@@ -2,6 +2,21 @@ include Js;
 
 type any = t(unit);
 
+module Falseable = {
+  type t('a);
+  let from = (opt: option('a)) : t('a) =>
+    switch opt {
+    | None => Reason.Obj.magic(Js.false_)
+    | Some(value) => Reason.Obj.magic(value)
+    };
+  let to_ = (opt: t('a)) : option('a) =>
+    if (Reason.Obj.magic(opt) === Js.false_) {
+      None;
+    } else {
+      Some(Reason.Obj.magic(opt));
+    };
+};
+
 module Any = {
   type t = any;
   type type_ =
@@ -106,7 +121,7 @@ module Primitive = {
         let newDict = Js.Dict.empty();
         KanaeArray.iteri(
           Js.Dict.keys(dict),
-          ~f=(~i, ~elt as key) => {
+          ~f=(~i as _, ~elt as key) => {
             let path = path ++ "." ++ key;
             let value = Js.Dict.unsafeGet(dict, key);
             if (KanaeList.contains(ignore, ~f=target => target == path)) {
@@ -131,11 +146,11 @@ module Iterator = {
     [@bs.get] external isDone : elt('value) => Js.boolean = "done";
     [@bs.get] external value : elt('value) => 'value = "value";
   };
-  let next = iter => {
+  let next = iter : option('value) => {
     let elt = Basic.next(iter);
-    Basic.isDone(elt) |> Js.to_bool ? None : Some(Basic.value);
+    Basic.isDone(elt) |> Js.to_bool ? None : Some(Basic.value(elt));
   };
-  let iter = (iter, ~f) => {
+  let iter = (iter: t('value), ~f: 'value => unit) : unit => {
     let rec iter0 = () =>
       switch (next(iter)) {
       | None => ()
@@ -148,6 +163,8 @@ module Iterator = {
 };
 
 let fromBool = Boolean.to_js_boolean;
+
+let fromList = KanaeList.toArray;
 
 let fromOpt = Null.from_opt;
 

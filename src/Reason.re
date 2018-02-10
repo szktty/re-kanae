@@ -6,6 +6,8 @@ module Buffer = Buffer;
 
 module Hashtbl = Hashtbl;
 
+module Js = Js;
+
 module List = List;
 
 module ListLabels = ListLabels;

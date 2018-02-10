@@ -1,3 +1,5 @@
+type t = string;
+
 let length = String.length;
 
 let get = (s, i) =>
@@ -54,6 +56,15 @@ let join = (~sep="", comps) => {
   );
   Buffer.contents(buf);
 };
+
+include
+  KanaeJSONable.Make(
+    {
+      type t = string;
+      let fromJSON = (json: Js.Json.t) => Js.Json.decodeString(json);
+      let toJSON = Js.Json.string;
+    }
+  );
 
 module Key = {
   type t = string;
