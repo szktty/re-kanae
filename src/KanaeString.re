@@ -21,6 +21,8 @@ let iter = (s, ~f) => String.iter(f, s);
 
 let iteri = (s, ~f) => String.iteri((i, elt) => f(~i, ~elt), s);
 
+let map = (s, ~f) => String.map(f, s);
+
 let isPrefix = (s, prefix) => {
   let rec f = (i, j, count) =>
     switch (get(s, i), get(prefix, j)) {
@@ -39,6 +41,12 @@ let isSuffix = (s, suffix) => {
   f(length(s) - 1, length(suffix) - 1, 0) == length(suffix);
 };
 
+let fromCharList = (cs: list(char)) : string => {
+  let bytes = Bytes.create(List.length(cs));
+  List.iteri((i, c) => Bytes.set(bytes, i, c), cs);
+  Bytes.to_string(bytes);
+};
+
 let join = (~sep="", comps) => {
   let sepLen = length(sep);
   let len =
@@ -55,6 +63,27 @@ let join = (~sep="", comps) => {
     comps
   );
   Buffer.contents(buf);
+};
+
+let reduce = (s, ~init, ~f) => {
+  let accu0 = ref(init);
+  iter(s, ~f=c => accu0 := f(~accu=accu0^, ~elt=c));
+  accu0^;
+};
+
+let split = (s, ~on: char) : list(string) => {
+  let (last, accu) =
+    reduce(
+      s,
+      ~init=([], []),
+      ~f=(~accu as (last: list(char), accu), ~elt as c: char) =>
+      if (c == on) {
+        ([], [fromCharList(last), ...accu]);
+      } else {
+        ([c, ...last], accu);
+      }
+    );
+  List.rev([fromCharList(last), ...accu]);
 };
 
 include
