@@ -1,0 +1,1 @@
+type t('a) = KanaeResult.t('a, KanaeError.t);

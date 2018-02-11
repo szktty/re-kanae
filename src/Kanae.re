@@ -12,6 +12,8 @@ module Comparable = KanaeComparable;
 
 module Date = KanaeDate;
 
+module Error = KanaeError;
+
 module Float = KanaeFloat;
 
 module Int = KanaeInt;
@@ -25,6 +27,8 @@ module List = KanaeList;
 module Map = KanaeMap;
 
 module Option = KanaeOption;
+
+module OrError = KanaeOrError;
 
 module Path = KanaePath;
 
