@@ -1,5 +1,7 @@
 module Array = KanaeArray;
 
+module Binary = KanaeBinary;
+
 module Bool = KanaeBool;
 
 module Buffer = KanaeBuffer;
@@ -11,6 +13,8 @@ module Char = KanaeChar;
 module Comparable = KanaeComparable;
 
 module Date = KanaeDate;
+
+module Digest = KanaeDigest;
 
 module Error = KanaeError;
 

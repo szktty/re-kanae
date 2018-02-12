@@ -15,9 +15,11 @@ open Kanae;
 This library shadows the standard library modules. Use prefix ``Reason.`` to access the modules (e.g., ``Reason.List``).
 
 - Array
+- Binary: Wrapper for JavaScript Buffer API
 - Bool: Boolean operations
 - Char
 - Comparable: Functor which makes a module has comparable data and comparison functions
+- Digest: Hash functions (SHA)
 - Error
 - Float
 - Int
@@ -30,6 +32,7 @@ This library shadows the standard library modules. Use prefix ``Reason.`` to acc
 - OrError: Shorthand for ``Result('a, Error.t)``
 - Path: File path operations
 - Promise
+- Random: Pseudo random number generator
 - Regexp: Regular expression which uses the JavaScript feature
 - Result: Represents a result value or error
 - String
