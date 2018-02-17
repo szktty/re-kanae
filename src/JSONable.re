@@ -1,7 +1,9 @@
+open Import;
+
 module type S = {
   type t;
-  let fromJSON: Js.Json.t => option(t);
-  let toJSON: t => Js.Json.t;
+  let fromJSON: BS.Js.Json.t => option(t);
+  let toJSON: t => BS.Js.Json.t;
 };
 
 module Make = (Item: S) : (S with type t := Item.t) => {

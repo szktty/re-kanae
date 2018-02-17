@@ -1,6 +1,6 @@
-module Reason = Builtin.Reason;
+open Import;
 
-module S = Reason.String;
+module S = RE.String;
 
 type t = string;
 
@@ -45,22 +45,18 @@ let isSuffix = (s, suffix) => {
 };
 
 let fromCharList = (cs: list(char)) : string => {
-  let bytes = Reason.Bytes.create(List.length(cs));
-  Reason.List.iteri((i, c) => Reason.Bytes.set(bytes, i, c), cs);
-  Reason.Bytes.to_string(bytes);
+  let bytes = RE.Bytes.create(List.length(cs));
+  RE.List.iteri((i, c) => RE.Bytes.set(bytes, i, c), cs);
+  RE.Bytes.to_string(bytes);
 };
 
 let join = (~sep="", comps) => {
   let sepLen = length(sep);
   let len =
-    Reason.List.fold_left(
-      (sum, comp) => sum + sepLen + length(comp),
-      0,
-      comps
-    );
-  let compsLen = Reason.List.length(comps);
-  let buf = Reason.Buffer.create(len);
-  Reason.List.iteri(
+    RE.List.fold_left((sum, comp) => sum + sepLen + length(comp), 0, comps);
+  let compsLen = RE.List.length(comps);
+  let buf = RE.Buffer.create(len);
+  RE.List.iteri(
     (i, comp) => {
       Buffer.add_string(buf, comp);
       if (i + 1 < compsLen) {
@@ -90,15 +86,15 @@ let split = (s, ~on: char) : list(string) => {
         ([c, ...last], accu);
       }
     );
-  Reason.List.rev([fromCharList(last), ...accu]);
+  RE.List.rev([fromCharList(last), ...accu]);
 };
 
 include
   JSONable.Make(
     {
       type t = string;
-      let fromJSON = (json: Js.Json.t) => Js.Json.decodeString(json);
-      let toJSON = Js.Json.string;
+      let fromJSON = (json: BS.Js.Json.t) => BS.Js.Json.decodeString(json);
+      let toJSON = BS.Js.Json.string;
     }
   );
 

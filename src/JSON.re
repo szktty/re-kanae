@@ -1,10 +1,12 @@
-type t = Js.Json.t;
+open Import;
 
-let fromString = Js.Json.string;
+type t = BS.Js.Json.t;
 
-let fromStringList = list => Js.Json.stringArray(List.toArray(list));
+let fromString = BS.Js.Json.string;
 
-let parseExn = Js.Json.parseExn;
+let fromStringList = list => BS.Js.Json.stringArray(List.toArray(list));
+
+let parseExn = BS.Js.Json.parseExn;
 
 let parse = s =>
   try (Some(parseExn(s))) {

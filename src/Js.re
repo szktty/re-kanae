@@ -1,18 +1,14 @@
-open Builtin;
+open Import;
 
-module J = BuckleScript.Js;
+type t('a) = BS.Js.t('a);
 
-module Json = BuckleScript.Js.Json;
+type boolean = BS.Js.boolean;
 
-type t('a) = J.t('a);
+type null('a) = BS.Js.null('a);
 
-type boolean = J.boolean;
+type undefined('a) = BS.Js.undefined('a);
 
-type null('a) = J.null('a);
-
-type undefined('a) = J.undefined('a);
-
-type nullable('a) = J.nullable('a);
+type nullable('a) = BS.Js.nullable('a);
 
 type type_ =
   | Null
@@ -24,7 +20,7 @@ type type_ =
   | Object
   | Function;
 
-let typeName = J.typeof;
+let typeName = BS.Js.typeof;
 
 let type_ = (js: t('a)) : type_ =>
   switch (typeName(js)) {
@@ -34,9 +30,9 @@ let type_ = (js: t('a)) : type_ =>
   | "string" => String
   | "function" => Function
   | "object" =>
-    if (J.unsafe_le(Reason.Obj.magic(js), 0)) {
+    if (BS.Js.unsafe_le(RE.Obj.magic(js), 0)) {
       Null;
-    } else if (J.Array.isArray(js)) {
+    } else if (BS.Js.Array.isArray(js)) {
       Array;
     } else {
       Object;
@@ -44,65 +40,69 @@ let type_ = (js: t('a)) : type_ =>
   | _ => failwith("unknown type")
   };
 
-let fromBool = J.Boolean.to_js_boolean;
+let fromBool = BS.Js.Boolean.to_js_boolean;
 
 let fromList = List.toArray;
 
-let fromOpt = J.Null.fromOption;
+let fromOpt = BS.Js.Null.fromOption;
 
-let fromOptMap = (opt, ~f) => Option.map(opt, ~f) |> J.Null.fromOption;
+let fromOptMap = (opt, ~f) => Option.map(opt, ~f) |> BS.Js.Null.fromOption;
 
-let toBool = J.to_bool;
+let toBool = BS.Js.to_bool;
 
-let toOpt = J.toOption;
+let toOpt = BS.Js.toOption;
 
-let log = J.log;
+let log = BS.Js.log;
 
 let diet = (js: t('a)) : t('a) => {
   let rec diet0 = (js: t('a)) =>
     switch (type_(js)) {
     | Object =>
-      let dict: J.Dict.t(t('a)) = Reason.Obj.magic(js);
-      let newDict = J.Dict.empty();
-      Reason.Array.iter(
+      let dict: BS.Js.Dict.t(t('a)) = RE.Obj.magic(js);
+      let newDict = BS.Js.Dict.empty();
+      RE.Array.iter(
         key => {
-          let value = J.Dict.unsafeGet(dict, key);
+          let value = BS.Js.Dict.unsafeGet(dict, key);
           switch (type_(value)) {
           | Null => ()
-          | _ => J.Dict.set(newDict, key, diet0(Reason.Obj.magic(value)))
+          | _ => BS.Js.Dict.set(newDict, key, diet0(Obj.magic(value)))
           };
         },
-        J.Dict.keys(dict)
+        BS.Js.Dict.keys(dict)
       );
-      Reason.Obj.magic(newDict);
+      Obj.magic(newDict);
     | _ => js
     };
   diet0(js);
+};
+
+module Dict = {
+  include BS.Js.Dict;
 };
 
 module False = {
   type t('a);
   let from = (opt: option('a)) : t('a) =>
     switch opt {
-    | None => Reason.Obj.magic(J.false_)
-    | Some(value) => Reason.Obj.magic(value)
+    | None => RE.Obj.magic(BS.Js.false_)
+    | Some(value) => RE.Obj.magic(value)
     };
   let to_ = (opt: t('a)) : option('a) =>
-    if (Reason.Obj.magic(opt) === J.false_) {
+    if (RE.Obj.magic(opt) === BS.Js.false_) {
       None;
     } else {
-      Some(Reason.Obj.magic(opt));
+      Some(RE.Obj.magic(opt));
     };
   let some = value => from(Some(value));
   let none = () => from(None);
 };
 
 module Any = {
-  type t = BuckleScript.Js.t(unit);
-  let return = (value: 'a) : t => Reason.Obj.magic(value);
+  type t = BS.Js.t(unit);
+  let return = (value: 'a) : t => RE.Obj.magic(value);
   let string = (value: t) : option(string) =>
     switch (type_(value)) {
-    | String => Some(Reason.Obj.magic(value))
+    | String => Some(RE.Obj.magic(value))
     | _ => None
     };
 };
@@ -117,7 +117,7 @@ module Iterator = {
   };
   let next = iter : option('value) => {
     let elt = Basic.next(iter);
-    Basic.isDone(elt) |> J.to_bool ? None : Some(Basic.value(elt));
+    Basic.isDone(elt) |> BS.Js.to_bool ? None : Some(Basic.value(elt));
   };
   let iter = (iter: t('value), ~f: 'value => unit) : unit => {
     let rec iter0 = () =>
