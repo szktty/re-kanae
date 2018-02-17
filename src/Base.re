@@ -10,6 +10,6 @@ let (!==) =
     (_: [ | `Use_physEqual], _: [ | `Use_physEqual])
     : [ | `Use_physEqual] => `Use_physEqual;
 
-include Js.Promise;
+include Promise;
 
-let promise = Js.Promise.make;
+let promise = Promise.make;

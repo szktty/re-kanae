@@ -31,11 +31,10 @@ module Basic = {
   [@bs.send] external set : (t('key, 'value), 'key, 'value) => unit = "set";
   [@bs.send] external delete : (t('key, 'value), 'key) => unit = "delete";
   [@bs.send]
-  external entries : t('key, 'value) => KanaeJs.Iterator.t(array('elt)) =
-    "entries";
+  external entries : t('key, 'value) => Js.Iterator.t(array('elt)) = "entries";
 };
 
-module Make = (Key: KanaeComparable.S) : (S with type key := Key.t) => {
+module Make = (Key: Comparable.S) : (S with type key := Key.t) => {
   type key = Key.t;
   type t('value) = Basic.t(key, 'value);
   let length = m => Basic.size(m);
@@ -46,12 +45,12 @@ module Make = (Key: KanaeComparable.S) : (S with type key := Key.t) => {
     Basic.set(m, k, v);
     m;
   };
-  let get = (m, ~key) => Js.toOption(Basic.get(m, key));
-  let getExn = (m, ~key) => KanaeOption.valueExn(get(m, key));
+  let get = (m, ~key) => Js.toOpt(Basic.get(m, key));
+  let getExn = (m, ~key) => Option.valueExn(get(m, key));
   let set = (m, ~key, ~value) => Basic.set(m, key, value);
   let remove = (m, ~key) => Basic.delete(m, key);
   let iter = (m: t('value), ~f: (~key: key, ~value: 'value) => unit) =>
-    KanaeJs.Iterator.iter(Basic.entries(m), ~f=(elt: array('pair)) =>
+    Js.Iterator.iter(Basic.entries(m), ~f=(elt: array('pair)) =>
       f(~key=Obj.magic(elt[0]), ~value=Obj.magic(elt[1]))
     );
   let map = (m, ~f) => {

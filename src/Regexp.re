@@ -7,8 +7,8 @@ module Match = {
   type t = Basic.t;
   let index = Basic.index;
   let input = Basic.input;
-  let last = t => KanaeArray.get(t, 0);
-  let get = (t, ~i) => KanaeArray.get(t, i + 1);
+  let last = t => t[0];
+  let get = (t, ~i) => t[i + 1];
 };
 
 module Basic = {
@@ -37,7 +37,7 @@ type t = {
 
 let create = (~flags: list(flag)=[], pattern: string) => {
   let flagsStr =
-    KanaeList.map(flags, ~f=flag =>
+    List.map(flags, ~f=flag =>
       switch flag {
       | G => "g"
       | I => "i"
@@ -46,7 +46,7 @@ let create = (~flags: list(flag)=[], pattern: string) => {
       | Y => "y"
       }
     )
-    |> KanaeString.join;
+    |> String.join;
   {t: Basic.create(pattern, flagsStr), pattern, flags};
 };
 
@@ -54,12 +54,13 @@ let source = re => re.pattern;
 
 let flags = re => re.flags;
 
-let global = re => Basic.global(re) |> Js.to_bool;
+let global = re => Basic.global(re) |> Js.toBool;
 
-let ignoreCase = re => Basic.ignoreCase(re) |> Js.to_bool;
+let ignoreCase = re => Basic.ignoreCase(re) |> Js.toBool;
 
-let lastIndex = re => Basic.lastIndex(re) |> Js.to_bool;
+let lastIndex = re => Basic.lastIndex(re) |> Js.toBool;
 
-let multiline = re => Basic.multiline(re) |> Js.to_bool;
+let multiline = re => Basic.multiline(re) |> Js.toBool;
 
-let exec = (re, ~s) : option(Match.t) => Basic.exec(re, s) |> Js.Null.to_opt;
+let exec = (re, ~s) : option(Match.t) =>
+  Basic.exec(re, s) |> Builtin.BuckleScript.Js.Null.toOption;

@@ -1,9 +1,13 @@
+module Reason = Builtin.Reason;
+
+module S = Reason.String;
+
 type t = string;
 
-let length = String.length;
+let length = S.length;
 
 let get = (s, i) =>
-  switch s.[i] {
+  switch (S.get(s, i)) {
   | exception (Invalid_argument(_)) => None
   | c => Some(c)
   };
@@ -14,14 +18,13 @@ let getExn = (s, i) =>
   | None => failwith("index out of range")
   };
 
-let compare = (s1, s2) =>
-  Reason.String.compare(s1, s2) |> KanaeComparable.Result.from;
+let compare = (s1, s2) => S.compare(s1, s2) |> Comparable.Result.from;
 
-let iter = (s, ~f) => String.iter(f, s);
+let iter = (s, ~f) => S.iter(f, s);
 
-let iteri = (s, ~f) => String.iteri((i, elt) => f(~i, ~elt), s);
+let iteri = (s, ~f) => S.iteri((i, elt) => f(~i, ~elt), s);
 
-let map = (s, ~f) => String.map(f, s);
+let map = (s, ~f) => S.map(f, s);
 
 let isPrefix = (s, prefix) => {
   let rec f = (i, j, count) =>
@@ -42,18 +45,22 @@ let isSuffix = (s, suffix) => {
 };
 
 let fromCharList = (cs: list(char)) : string => {
-  let bytes = Bytes.create(List.length(cs));
-  List.iteri((i, c) => Bytes.set(bytes, i, c), cs);
-  Bytes.to_string(bytes);
+  let bytes = Reason.Bytes.create(List.length(cs));
+  Reason.List.iteri((i, c) => Reason.Bytes.set(bytes, i, c), cs);
+  Reason.Bytes.to_string(bytes);
 };
 
 let join = (~sep="", comps) => {
   let sepLen = length(sep);
   let len =
-    List.fold_left((sum, comp) => sum + sepLen + length(comp), 0, comps);
-  let compsLen = List.length(comps);
-  let buf = Buffer.create(len);
-  List.iteri(
+    Reason.List.fold_left(
+      (sum, comp) => sum + sepLen + length(comp),
+      0,
+      comps
+    );
+  let compsLen = Reason.List.length(comps);
+  let buf = Reason.Buffer.create(len);
+  Reason.List.iteri(
     (i, comp) => {
       Buffer.add_string(buf, comp);
       if (i + 1 < compsLen) {
@@ -83,11 +90,11 @@ let split = (s, ~on: char) : list(string) => {
         ([c, ...last], accu);
       }
     );
-  List.rev([fromCharList(last), ...accu]);
+  Reason.List.rev([fromCharList(last), ...accu]);
 };
 
 include
-  KanaeJSONable.Make(
+  JSONable.Make(
     {
       type t = string;
       let fromJSON = (json: Js.Json.t) => Js.Json.decodeString(json);
@@ -100,4 +107,4 @@ module Key = {
   let compare = compare;
 };
 
-module Map = KanaeMap.Make(Key);
+module Map = Map.Make(Key);

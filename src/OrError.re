@@ -1,0 +1,1 @@
+type t('a) = Result.t('a, Error.t);
