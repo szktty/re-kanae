@@ -104,6 +104,18 @@ module Json = {
   include BS.Js.Json;
 };
 
+module Option = {
+  include BS.Js.Option;
+};
+
+module Result = {
+  include BS.Js.Result;
+};
+
+module Promise = {
+  include BS.Js.Promise;
+};
+
 module False = {
   type t('a);
   let from = (opt: option('a)) : t('a) =>
