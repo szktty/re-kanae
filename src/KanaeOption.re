@@ -29,3 +29,15 @@ let map = (opt, ~f) =>
   | Some(v) => Some(f(v))
   | None => None
   };
+
+let findMap = (opt, ~f) =>
+  switch opt {
+  | None => None
+  | Some(v) => f(v)
+  };
+
+let filter = (opt, ~f) =>
+  switch opt {
+  | None => None
+  | Some(v) => f(v) ? Some(v) : None
+  };

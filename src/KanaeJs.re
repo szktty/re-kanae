@@ -2,7 +2,7 @@ include Js;
 
 type any = t(unit);
 
-module Falseable = {
+module False = {
   type t('a);
   let from = (opt: option('a)) : t('a) =>
     switch opt {
@@ -15,6 +15,8 @@ module Falseable = {
     } else {
       Some(Reason.Obj.magic(opt));
     };
+  let some = value => from(Some(value));
+  let none = () => from(None);
 };
 
 module Any = {
@@ -45,9 +47,15 @@ module Any = {
       }
     | _ => failwith("unknown type")
     };
+  let return = (value: 'a) : t => Reason.Obj.magic(value);
   let fromString = (value: string) : t => Reason.Obj.magic(value); /* TODO */
   let toString = (value: t) : string => Reason.Obj.magic(value);
   let toStringOrNull = (value: t) : option(string) => Reason.Obj.magic(value);
+  let string = (value: t) : option(string) =>
+    switch (type_(value)) {
+    | String => Some(Reason.Obj.magic(value))
+    | _ => None
+    };
   /* TODO: iter, map */
   let diet = (js: Js.t('a)) : Js.t('a) => {
     let rec diet0 = (js: Js.t('a)) =>

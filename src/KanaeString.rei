@@ -26,3 +26,5 @@ let join: (~sep: string=?, list(string)) => string;
 let split: (string, ~on: char) => list(string);
 
 include KanaeJSONable.S with type t := t;
+
+module Map: KanaeMap.S with type key := string;
