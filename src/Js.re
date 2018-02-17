@@ -76,8 +76,32 @@ let diet = (js: t('a)) : t('a) => {
   diet0(js);
 };
 
+module Array = {
+  include BS.Js.Array;
+};
+
+module Boolean = {
+  include BS.Js.Boolean;
+};
+
 module Dict = {
   include BS.Js.Dict;
+};
+
+module List = {
+  include BS.Js.List;
+};
+
+module Null = {
+  include BS.Js.Null;
+};
+
+module Undefined = {
+  include BS.Js.Undefined;
+};
+
+module Json = {
+  include BS.Js.Json;
 };
 
 module False = {
