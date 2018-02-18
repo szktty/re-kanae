@@ -27,7 +27,7 @@ module Basic = {
   [@bs.new] external create : unit => t('key, 'value) = "Map";
   [@bs.get] external size : t('key, 'value) => int = "size";
   [@bs.send]
-  external get : (t('key, 'value), 'key) => Js.nullable('value) = "get";
+  external get : (t('key, 'value), 'key) => Js.Nullable.t('value) = "get";
   [@bs.send] external set : (t('key, 'value), 'key, 'value) => unit = "set";
   [@bs.send] external delete : (t('key, 'value), 'key) => unit = "delete";
   [@bs.send]

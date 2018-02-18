@@ -13,12 +13,12 @@ module Match = {
 
 module Basic = {
   type t;
-  type result = Js.null(Match.Basic.t);
+  type result = Js.Null.t(Match.Basic.t);
   [@bs.new] external create : (string, string) => t = "RegExp";
-  [@bs.get] external global : t => Js.boolean = "global";
-  [@bs.get] external ignoreCase : t => Js.boolean = "ignoreCase";
-  [@bs.get] external lastIndex : t => Js.boolean = "lastIndex";
-  [@bs.get] external multiline : t => Js.boolean = "multiline";
+  [@bs.get] external global : t => Js.Boolean.t = "global";
+  [@bs.get] external ignoreCase : t => Js.Boolean.t = "ignoreCase";
+  [@bs.get] external lastIndex : t => Js.Boolean.t = "lastIndex";
+  [@bs.get] external multiline : t => Js.Boolean.t = "multiline";
   [@bs.send] external exec : (t, string) => result = "exec";
 };
 
@@ -62,5 +62,4 @@ let lastIndex = re => Basic.lastIndex(re) |> Js.toBool;
 
 let multiline = re => Basic.multiline(re) |> Js.toBool;
 
-let exec = (re, ~s) : option(Match.t) =>
-  Basic.exec(re, s) |> Builtin.BuckleScript.Js.Null.toOption;
+let exec = (re, ~s) : option(Match.t) => Basic.exec(re, s) |> Js.Null.toOption;

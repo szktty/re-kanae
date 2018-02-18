@@ -2,14 +2,6 @@ open Import;
 
 type t('a) = BS.Js.t('a);
 
-type boolean = BS.Js.boolean;
-
-type null('a) = BS.Js.null('a);
-
-type undefined('a) = BS.Js.undefined('a);
-
-type nullable('a) = BS.Js.nullable('a);
-
 type type_ =
   | Null
   | Undefined
@@ -82,6 +74,7 @@ module Array = {
 
 module Boolean = {
   include BS.Js.Boolean;
+  type t = BS.Js.boolean;
 };
 
 module Dict = {
@@ -94,6 +87,10 @@ module List = {
 
 module Null = {
   include BS.Js.Null;
+};
+
+module Nullable = {
+  include BS.Js.Nullable;
 };
 
 module Undefined = {
@@ -148,7 +145,7 @@ module Iterator = {
   type elt('value);
   module Basic = {
     [@bs.send] external next : t('value) => elt('value) = "next";
-    [@bs.get] external isDone : elt('value) => boolean = "done";
+    [@bs.get] external isDone : elt('value) => Boolean.t = "done";
     [@bs.get] external value : elt('value) => 'value = "value";
   };
   let next = iter : option('value) => {
