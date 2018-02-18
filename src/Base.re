@@ -1,15 +1,12 @@
 let log = Js.log;
 
-let physEqual = (===);
 
-let (===) =
-    (_: [ | `Use_physEqual], _: [ | `Use_physEqual])
-    : [ | `Use_physEqual] => `Use_physEqual;
 
-let (!==) =
-    (_: [ | `Use_physEqual], _: [ | `Use_physEqual])
-    : [ | `Use_physEqual] => `Use_physEqual;
 
-include Promise;
 
-let promise = Promise.make;
+
+let absEqual = (==);
+
+let (==) = (_: [ | `Use_absEqual], _: [ | `Use_absEqual]) : [ | `Use_absEqual] => `Use_absEqual;
+
+let (!=) = (_: [ | `Use_absEqual], _: [ | `Use_absEqual]) : [ | `Use_absEqual] => `Use_absEqual;
