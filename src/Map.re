@@ -45,7 +45,7 @@ module Make = (Key: Comparable.S) : (S with type key := Key.t) => {
     Basic.set(m, k, v);
     m;
   };
-  let get = (m, ~key) => Js.toOpt(Basic.get(m, key));
+  let get = (m, ~key) => Js.toOption(Basic.get(m, key));
   let getExn = (m, ~key) => Option.valueExn(get(m, key));
   let set = (m, ~key, ~value) => Basic.set(m, key, value);
   let remove = (m, ~key) => Basic.delete(m, key);

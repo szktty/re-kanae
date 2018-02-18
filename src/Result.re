@@ -2,7 +2,7 @@ type t('ok, 'error) =
   | OK('ok)
   | Error('error);
 
-let fromOpt = (ok, ~error) =>
+let fromOption = (ok, ~error) =>
   switch ok {
   | Some(value) => OK(value)
   | None => Error(error)

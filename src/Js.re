@@ -36,13 +36,13 @@ let fromBool = BS.Js.Boolean.to_js_boolean;
 
 let fromList = List.toArray;
 
-let fromOpt = BS.Js.Null.fromOption;
+let fromOption = BS.Js.Null.fromOption;
 
 let fromOptMap = (opt, ~f) => Option.map(opt, ~f) |> BS.Js.Null.fromOption;
 
 let toBool = BS.Js.to_bool;
 
-let toOpt = BS.Js.toOption;
+let toOption = BS.Js.toOption;
 
 let log = BS.Js.log;
 
