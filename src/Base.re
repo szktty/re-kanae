@@ -56,10 +56,14 @@ module Writer = Writer;
 
 let show = Js.log;
 
-let absEqual = (==);
+let abstEqual = (==);
 
-let (==) = (_: [ | `Use_absEqual], _: [ | `Use_absEqual]) : [ | `Use_absEqual] => `Use_absEqual;
+let (==) =
+    (_: [ | `Use_abstEqual], _: [ | `Use_abstEqual])
+    : [ | `Use_abstEqual] => `Use_abstEqual;
 
-let (!=) = (_: [ | `Use_absEqual], _: [ | `Use_absEqual]) : [ | `Use_absEqual] => `Use_absEqual;
+let (!=) =
+    (_: [ | `Use_abstEqual], _: [ | `Use_abstEqual])
+    : [ | `Use_abstEqual] => `Use_abstEqual;
 
 let withReturn = WithReturn.withReturn;
