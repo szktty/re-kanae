@@ -50,6 +50,8 @@ module String = String;
 
 module Time = Time;
 
+module WithReturn = WithReturn;
+
 module Writer = Writer;
 
 let show = Js.log;
@@ -59,3 +61,5 @@ let absEqual = (==);
 let (==) = (_: [ | `Use_absEqual], _: [ | `Use_absEqual]) : [ | `Use_absEqual] => `Use_absEqual;
 
 let (!=) = (_: [ | `Use_absEqual], _: [ | `Use_absEqual]) : [ | `Use_absEqual] => `Use_absEqual;
+
+let withReturn = WithReturn.withReturn;
