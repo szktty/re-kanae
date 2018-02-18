@@ -1,9 +1,10 @@
-let log = Js.log;
 
 
 
 
 
+
+let show = Js.log;
 
 let absEqual = (==);
 
