@@ -14,4 +14,4 @@ let get = (ary, i) =>
 
 let set = RE.Array.set;
 
-let iteri = (ary, ~f) => RE.Array.iteri((i, elt) => f(~i, ~elt), ary);
+let eachi = (ary, ~f) => RE.Array.iteri((i, elt) => f(~i, ~elt), ary);

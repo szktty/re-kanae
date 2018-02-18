@@ -20,9 +20,9 @@ let getExn = (s, i) =>
 
 let compare = (s1, s2) => S.compare(s1, s2) |> Comparable.Result.from;
 
-let iter = (s, ~f) => S.iter(f, s);
+let each = (s, ~f) => S.iter(f, s);
 
-let iteri = (s, ~f) => S.iteri((i, elt) => f(~i, ~elt), s);
+let eachi = (s, ~f) => S.iteri((i, elt) => f(~i, ~elt), s);
 
 let map = (s, ~f) => S.map(f, s);
 
@@ -70,7 +70,7 @@ let join = (~sep="", comps) => {
 
 let reduce = (s, ~init, ~f) => {
   let accu0 = ref(init);
-  iter(s, ~f=c => accu0 := f(~accu=accu0^, ~elt=c));
+  each(s, ~f=c => accu0 := f(~accu=accu0^, ~elt=c));
   accu0^;
 };
 

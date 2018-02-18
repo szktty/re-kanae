@@ -2,15 +2,15 @@ open Builtin;
 
 let length = Reason.List.length;
 
-let iteri = (list, ~f) => {
-  let rec iter = (i, list) =>
+let eachi = (list, ~f) => {
+  let rec eachi0 = (i, list) =>
     switch list {
     | [] => ()
     | [hd, ...tl] =>
       f(~i, ~elt=hd);
-      iter(i + 1, tl);
+      eachi0(i + 1, tl);
     };
-  iter(0, list);
+  eachi0(0, list);
 };
 
 let map = (list, ~f) => Reason.List.map(f, list);
@@ -25,6 +25,6 @@ let toArray = list =>
   | [] => [||]
   | [hd, ..._tl] =>
     let array = Reason.Array.make(length(list), hd);
-    iteri(list, ~f=(~i, ~elt) => array[i] = elt);
+    eachi(list, ~f=(~i, ~elt) => array[i] = elt);
     array;
   };

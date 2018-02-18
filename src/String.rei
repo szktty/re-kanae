@@ -8,9 +8,9 @@ let get: (string, int) => option(char);
 
 let getExn: (string, int) => char;
 
-let iter: (string, ~f: char => unit) => unit;
+let each: (string, ~f: char => unit) => unit;
 
-let iteri: (string, ~f: (~i: int, ~elt: char) => unit) => unit;
+let eachi: (string, ~f: (~i: int, ~elt: char) => unit) => unit;
 
 let map: (string, ~f: char => char) => string;
 

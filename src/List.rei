@@ -1,6 +1,6 @@
 let length: list('elt) => int;
 
-let iteri: (list('elt), ~f: (~i: int, ~elt: 'elt) => unit) => unit;
+let eachi: (list('elt), ~f: (~i: int, ~elt: 'elt) => unit) => unit;
 
 let map: (list('elt1), ~f: 'elt1 => 'elt2) => list('elt2);
 

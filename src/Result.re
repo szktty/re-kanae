@@ -32,13 +32,13 @@ let error = res =>
   | OK(_) => None
   };
 
-let iter = (res, ~f: 'ok => unit) : unit =>
+let each = (res, ~f: 'ok => unit) : unit =>
   switch res {
   | OK(value) => f(value)
   | Error(_) => ()
   };
 
-let iterError = (res, ~f: 'error => unit) : unit =>
+let eachError = (res, ~f: 'error => unit) : unit =>
   switch res {
   | Error(value) => f(value)
   | OK(_) => ()

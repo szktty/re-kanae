@@ -1,6 +1,6 @@
 type t('a) = option('a);
 
-let iter = (opt, ~f) =>
+let each = (opt, ~f) =>
   switch opt {
   | None => ()
   | Some(value) => f(value)

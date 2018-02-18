@@ -8,4 +8,4 @@ let getExn: (array('elt), int) => 'elt;
 
 let set: (array('elt), int, 'elt) => unit;
 
-let iteri: (array('elt), ~f: (~i: int, ~elt: 'elt) => unit) => unit;
+let eachi: (array('elt), ~f: (~i: int, ~elt: 'elt) => unit) => unit;

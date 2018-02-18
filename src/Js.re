@@ -140,7 +140,7 @@ module Any = {
     };
 };
 
-module Iterator = {
+module Enumerator = {
   type t('value);
   type elt('value);
   module Basic = {
@@ -148,18 +148,18 @@ module Iterator = {
     [@bs.get] external isDone : elt('value) => Boolean.t = "done";
     [@bs.get] external value : elt('value) => 'value = "value";
   };
-  let next = iter : option('value) => {
-    let elt = Basic.next(iter);
+  let next = each : option('value) => {
+    let elt = Basic.next(each);
     Basic.isDone(elt) |> BS.Js.to_bool ? None : Some(Basic.value(elt));
   };
-  let iter = (iter: t('value), ~f: 'value => unit) : unit => {
-    let rec iter0 = () =>
-      switch (next(iter)) {
+  let each = (each: t('value), ~f: 'value => unit) : unit => {
+    let rec each0 = () =>
+      switch (next(each)) {
       | None => ()
       | Some(value) =>
         f(value);
-        iter0();
+        each0();
       };
-    iter0();
+    each0();
   };
 };

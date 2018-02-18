@@ -9,7 +9,7 @@ module type S = {
   let getExn: (t('value), ~key: key) => 'value;
   let set: (t('value), ~key: key, ~value: 'value) => unit;
   let remove: (t('value), ~key: key) => unit;
-  let iter: (t('value), ~f: (~key: key, ~value: 'value) => unit) => unit;
+  let each: (t('value), ~f: (~key: key, ~value: 'value) => unit) => unit;
   let map: (t('value1), ~f: 'value1 => 'value2) => t('value2);
   let reduce:
     (
@@ -31,7 +31,8 @@ module Basic = {
   [@bs.send] external set : (t('key, 'value), 'key, 'value) => unit = "set";
   [@bs.send] external delete : (t('key, 'value), 'key) => unit = "delete";
   [@bs.send]
-  external entries : t('key, 'value) => Js.Iterator.t(array('elt)) = "entries";
+  external entries : t('key, 'value) => Js.Enumerator.t(array('elt)) =
+    "entries";
 };
 
 module Make = (Key: Comparable.S) : (S with type key := Key.t) => {
@@ -49,23 +50,23 @@ module Make = (Key: Comparable.S) : (S with type key := Key.t) => {
   let getExn = (m, ~key) => Option.valueExn(get(m, key));
   let set = (m, ~key, ~value) => Basic.set(m, key, value);
   let remove = (m, ~key) => Basic.delete(m, key);
-  let iter = (m: t('value), ~f: (~key: key, ~value: 'value) => unit) =>
-    Js.Iterator.iter(Basic.entries(m), ~f=(elt: array('pair)) =>
+  let each = (m: t('value), ~f: (~key: key, ~value: 'value) => unit) =>
+    Js.Enumerator.each(Basic.entries(m), ~f=(elt: array('pair)) =>
       f(~key=Obj.magic(elt[0]), ~value=Obj.magic(elt[1]))
     );
   let map = (m, ~f) => {
     let m1 = empty();
-    iter(m, ~f=(~key, ~value) => set(m1, ~key, ~value=f(value)));
+    each(m, ~f=(~key, ~value) => set(m1, ~key, ~value=f(value)));
     m1;
   };
   let reduce = (m, ~init, ~f) => {
     let accu = ref(init);
-    iter(m, ~f=(~key, ~value) => accu := f(~init=accu^, ~key, ~value));
+    each(m, ~f=(~key, ~value) => accu := f(~init=accu^, ~key, ~value));
     accu^;
   };
   let filter = (m, ~f) => {
     let m1 = empty();
-    iter(m, ~f=(~key, ~value) =>
+    each(m, ~f=(~key, ~value) =>
       if (f(~key, ~value)) {
         set(m1, ~key, ~value);
       }
