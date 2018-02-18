@@ -8,6 +8,8 @@ module Char = Char;
 
 module Comparable = Comparable;
 
+module Collection = Collection;
+
 module Date = Date;
 
 module Digest = Digest;
